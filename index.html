@@ -303,4 +303,158 @@ function renderTimetable() {
       h += '<div class="slot">'
         +'<div class="slot-info">'
         +'<div class="slot-time" style="color:'+(course?course.color:'#aaa')+'">'+fmt12(sl.time)+' · '+(course?course.code:sl.courseId)+'</div>'
-        +'<div class="slot-course">'+(course?course.title:''
+        +'<div class="slot-course">'+(course?course.title:'')+'</div>'
+        +(sl.note?'<div class="slot-note">📝 '+sl.note+'</div>':'')
+        +'<div class="slot-alarm" style="color:'+(alarmOn?'#4CAF82':'#444')+'">'+(alarmOn?'🔔 Alarm: '+fireTime(sl.time):'🔕 Alarm off')+'</div>'
+        +'</div>'
+        +'<div class="slot-btns">'
+        +'<button class="ibtn" style="background:rgba(255,255,255,0.1);color:#fff" onclick="openModal('+idx+')">✏️</button>'
+        +'<button class="ibtn" style="background:'+(alarmOn?'rgba(76,175,82,0.15)':'rgba(255,255,255,0.06)')+';color:'+(alarmOn?'#4CAF82':'#666')+'" onclick="toggleAlarm('+idx+')">'+(alarmOn?'🔔':'🔕')+'</button>'
+        +'<button class="ibtn" style="background:rgba(255,68,68,0.15);color:#ff7070" onclick="delSlot('+idx+')">✕</button>'
+        +'</div></div>';
+    });
+    h += '<div class="add-row" onclick="openModal(null,\''+day+'\')">＋ Add class</div></div></div>';
+  });
+  document.getElementById('pane-timetable').innerHTML = h;
+}
+
+function toggleAlarm(idx) { state.slots[idx].alarmOn=!(state.slots[idx].alarmOn!==false); save(); renderTimetable(); renderAlarms(); scheduleAlarms(); }
+function delSlot(idx) { if(!confirm('Delete this class?')) return; state.slots.splice(idx,1); save(); renderTimetable(); renderAlarms(); scheduleAlarms(); }
+
+// ── MODAL ──
+function openModal(idx, preDay) {
+  editIdx = idx;
+  var sl = idx!==null ? state.slots[idx] : null;
+  document.getElementById('mtitle').textContent = sl?'Edit Class':'Add Class';
+  document.getElementById('m-day').value = sl?sl.day:(preDay||'');
+  document.getElementById('m-time').value = sl?sl.time:'';
+  document.getElementById('m-note').value = sl?sl.note||'':'';
+  var cs = document.getElementById('m-course');
+  cs.innerHTML = '<option value="">-- Select course --</option>';
+  COURSES.forEach(function(c) {
+    var o=document.createElement('option'); o.value=c.id; o.textContent=c.code+' – '+c.title;
+    if(sl&&sl.courseId===c.id) o.selected=true;
+    cs.appendChild(o);
+  });
+  checkSave();
+  document.getElementById('overlay').classList.remove('hidden');
+}
+
+function closeModal() { document.getElementById('overlay').classList.add('hidden'); }
+
+document.getElementById('overlay').addEventListener('click', function(e){ if(e.target===this) closeModal(); });
+
+function checkSave() {
+  var ok = document.getElementById('m-day').value && document.getElementById('m-time').value && document.getElementById('m-course').value;
+  document.getElementById('msave').disabled = !ok;
+}
+['m-day','m-time','m-course'].forEach(function(id){ document.getElementById(id).addEventListener('change', checkSave); });
+
+function saveSlot() {
+  var slot = {
+    day: document.getElementById('m-day').value,
+    time: document.getElementById('m-time').value,
+    courseId: document.getElementById('m-course').value,
+    note: document.getElementById('m-note').value.trim(),
+    alarmOn: true
+  };
+  if(editIdx!==null) state.slots[editIdx]=slot;
+  else state.slots.push(slot);
+  save(); closeModal(); renderTimetable(); renderAlarms(); scheduleAlarms();
+}
+
+// ── ALARMS ──
+function renderAlarms() {
+  var el = document.getElementById('pane-alarms');
+  var today = todayName();
+  var notifOk = 'Notification' in window && Notification.permission==='granted';
+  var sorted = state.slots.slice().sort(function(a,b){
+    var di=DAYS.indexOf(a.day)-DAYS.indexOf(b.day);
+    return di!==0?di:a.time.localeCompare(b.time);
+  });
+  var alarmRows = sorted.length===0
+    ? '<div style="font-size:13px;color:#555;font-style:italic">No classes yet — add them in Timetable.</div>'
+    : sorted.map(function(sl){
+        var idx=state.slots.indexOf(sl), c=COURSES.find(function(x){return x.id===sl.courseId;}), on=sl.alarmOn!==false;
+        return '<div class="arow">'
+          +'<div><div class="aday">'+sl.day+(sl.day===today?' · Today':'')+'</div>'
+          +'<div class="acode" style="color:'+(c?c.color:'#aaa')+'">'+(c?c.code:sl.courseId)+'</div>'
+          +'<div class="atime">🕐 '+fmt12(sl.time)+' · fires '+fireTime(sl.time)+'</div></div>'
+          +'<span class="badge '+(on?'on':'off')+'" onclick="toggleAlarm('+idx+')">'+(on?'ON':'OFF')+'</span>'
+          +'</div>';
+      }).join('');
+
+  var todaySlots = state.slots.filter(function(s){return s.day===today;}).sort(function(a,b){return a.time.localeCompare(b.time);});
+  var todayHtml = todaySlots.length===0
+    ? '<div style="font-size:13px;color:#555;font-style:italic">No classes today.</div>'
+    : todaySlots.map(function(sl){
+        var c=COURSES.find(function(x){return x.id===sl.courseId;});
+        return '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">'
+          +'<div style="width:3px;height:36px;border-radius:2px;background:'+(c?c.color:'#aaa')+';flex-shrink:0"></div>'
+          +'<div><div style="font-size:12px;font-weight:700;font-family:Syne,sans-serif;color:'+(c?c.color:'#aaa')+'">'+(c?c.code:'?')+' · '+fmt12(sl.time)+'</div>'
+          +'<div style="font-size:11px;color:#aaa">'+(c?c.title:'')+'</div></div></div>';
+      }).join('');
+
+  var sumRows = COURSES.map(function(c){
+    var p=getP(c.id), pct=Math.round(p.done/p.total*100);
+    return '<div class="srow"><span class="scode" style="color:'+c.color+'">'+c.code+'</span>'
+      +'<div class="sbg"><div class="sfill" style="width:'+pct+'%;background:'+c.color+'"></div></div>'
+      +'<span class="spct">'+pct+'%</span></div>';
+  }).join('');
+
+  el.innerHTML =
+    '<div style="font-family:Syne,sans-serif;font-size:19px;font-weight:800;margin-bottom:4px">Alarms</div>'
+    +'<div style="font-size:12px;color:#6b7280;margin-bottom:14px">Notifications fire 15 min before each class.</div>'
+    +'<div class="acard"><div class="atitle">🔔 Notification Status</div>'
+    +(notifOk
+      ?'<div style="font-size:13px;color:#4CAF82;font-weight:600">✅ Notifications enabled</div>'
+      :'<button class="notif-btn" onclick="reqNotif()">Enable Notifications</button>')
+    +'<div id="nst" style="font-size:12px;color:#888;margin-top:6px;text-align:center"></div></div>'
+    +'<div class="acard"><div class="atitle">📅 Today ('+today+')</div>'+todayHtml+'</div>'
+    +'<div class="acard"><div class="atitle">⏰ All Class Alarms</div>'+alarmRows+'</div>'
+    +'<div class="acard"><div class="atitle">📊 Topic Progress</div>'+sumRows+'</div>';
+}
+
+async function reqNotif() {
+  if(!('Notification' in window)){document.getElementById('nst').textContent='❌ Not supported here.';return;}
+  var p = await Notification.requestPermission();
+  if(p==='granted'){scheduleAlarms();setTimeout(function(){renderAlarms();},500);}
+  else document.getElementById('nst').textContent='❌ Blocked. Allow in browser settings.';
+}
+
+// ── SCHEDULE ALARMS ──
+function scheduleAlarms() {
+  alarmTimers.forEach(function(t){clearTimeout(t);});
+  alarmTimers=[];
+  if(!('Notification' in window)||Notification.permission!=='granted') return;
+  var now = new Date();
+  state.slots.forEach(function(sl) {
+    if(sl.alarmOn===false) return;
+    var course = COURSES.find(function(c){return c.id===sl.courseId;});
+    var dayIdx = DAYS.indexOf(sl.day);
+    var slotDow = (dayIdx+1)%7;
+    var parts = sl.time.split(':'), h=parseInt(parts[0]), m=parseInt(parts[1]);
+    var todayDow = now.getDay();
+    var diff = (slotDow-todayDow+7)%7;
+    var target = new Date(now);
+    target.setDate(now.getDate()+diff);
+    target.setHours(h, m-ALARM_MIN, 0, 0);
+    if(target<=now) target.setDate(target.getDate()+7);
+    var delay = target-now;
+    var tid = setTimeout(function(){
+      new Notification('🔔 Class in 15 min', {body:(course?course.code:sl.courseId)+' · '+sl.day+' '+fmt12(sl.time)+(sl.note?'\n'+sl.note:'')});
+      scheduleAlarms();
+    }, delay);
+    alarmTimers.push(tid);
+  });
+}
+
+init();
+
+// Force cache bust on load
+if(window.location.search.indexOf('v=')===-1){
+  window.location.replace(window.location.href.split('?')[0]+'?v=5');
+}
+</script>
+</body>
+</html>
