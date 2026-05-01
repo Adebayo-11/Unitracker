@@ -4,283 +4,468 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <meta name="theme-color" content="#0d0f18"/>
-<meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-<meta name="apple-mobile-web-app-title" content="UniTracker"/>
+<meta name="cache-control" content="no-cache"/>
 <title>UniTracker · UNILAG</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230d0f18'/%3E%3Ccircle cx='50' cy='50' r='38' fill='none' stroke='%234f8ef7' stroke-width='5'/%3E%3Ctext x='50' y='57' text-anchor='middle' font-family='sans-serif' font-weight='900' font-size='28' fill='white'%3EUT%3C/text%3E%3Ccircle cx='72' cy='28' r='10' fill='%234CAF82'/%3E%3Ctext x='72' y='33' text-anchor='middle' font-family='sans-serif' font-weight='900' font-size='13' fill='white'%3E✓%3C/text%3E%3C/svg%3E"/>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230d0f18'/%3E%3Ccircle cx='50' cy='50' r='38' fill='none' stroke='%234f8ef7' stroke-width='5'/%3E%3Ctext x='50' y='57' text-anchor='middle' font-family='sans-serif' font-weight='900' font-size='28' fill='white'%3EUT%3C/text%3E%3Ccircle cx='72' cy='28' r='10' fill='%234CAF82'/%3E%3Ctext x='72' y='33' text-anchor='middle' font-family='sans-serif' font-weight='900' font-size='13' fill='white'%3E✓%3C/text%3E%3C/svg%3E"/>
+<link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;UniTracker&quot;,&quot;short_name&quot;:&quot;UniTracker&quot;,&quot;start_url&quot;:&quot;.&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;%230d0f18&quot;,&quot;theme_color&quot;:&quot;%230d0f18&quot;}"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
-:root{--bg:#0d0f18;--s1:#161a27;--s2:#1d2236;--bdr:rgba(255,255,255,0.08);--txt:#e8eaf0;--muted:#6b7280;--acc:#4f8ef7;--fh:'Syne',sans-serif;--fb:'DM Sans',sans-serif;--st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden;background:var(--bg)}
-body{font-family:var(--fb);color:var(--txt);display:flex;flex-direction:column}
-#app{display:flex;flex-direction:column;height:100%}
-
+body{font-family:'DM Sans',sans-serif;background:#0d0f18;color:#e8eaf0;display:flex;flex-direction:column;height:100vh;overflow:hidden}
 /* HEADER */
-.hdr{padding:calc(var(--st) + 16px) 16px 14px;background:linear-gradient(160deg,#1a2040,#0d0f18);border-bottom:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
-.hdr-left{display:flex;align-items:center;gap:12px;flex:1;min-width:0}
-.logo{width:36px;height:36px;flex-shrink:0}
-.hdr-txt h1{font-family:var(--fh);font-size:21px;font-weight:800;letter-spacing:-.5px}
-.hdr-txt p{font-size:11px;color:var(--muted);margin-top:2px}
-.ring-wrap{position:relative;width:52px;height:52px;flex-shrink:0}
-.ring-wrap svg{transform:rotate(-90deg)}
-.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.ring-pct{font-family:var(--fh);font-size:14px;font-weight:800;line-height:1}
-.ring-sub{font-size:9px;color:var(--muted)}
-
+.hdr{padding:20px 16px 14px;background:linear-gradient(160deg,#1a2040,#0d0f18);border-bottom:1px solid rgba(255,255,255,0.08);display:flex;justify-content:space-between;align-items:center}
+.hdr h1{font-family:'Syne',sans-serif;font-size:22px;font-weight:800}
+.hdr p{font-size:11px;color:#6b7280;margin-top:2px}
+.ring{position:relative;width:52px;height:52px}
+.ring svg{transform:rotate(-90deg)}
+.ring-mid{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-mid span:first-child{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;line-height:1}
+.ring-mid span:last-child{font-size:9px;color:#6b7280}
 /* TABS */
-.tabs{display:flex;padding:10px 14px 0;gap:4px;border-bottom:1px solid var(--bdr);flex-shrink:0;background:var(--bg)}
-.tab{flex:1;padding:9px 2px;background:none;border:none;color:var(--muted);font-family:var(--fb);font-size:12px;font-weight:600;cursor:pointer;border-bottom:2.5px solid transparent;transition:all .2s}
-.tab.on{color:var(--txt);border-bottom-color:#fff}
-
-/* SCROLL */
-.pane{flex:1;overflow-y:auto;padding:14px;-webkit-overflow-scrolling:touch;display:none}
-.pane.on{display:block}
+.tabs{display:flex;background:#0d0f18;border-bottom:1px solid rgba(255,255,255,0.08)}
+.tab{flex:1;padding:10px 4px;background:none;border:none;border-bottom:2.5px solid transparent;color:#6b7280;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.tab.active{color:#e8eaf0;border-bottom-color:#fff}
+/* PANES */
+.pane{flex:1;overflow-y:auto;padding:14px;display:none}
+.pane.active{display:block}
 .pane::-webkit-scrollbar{display:none}
-
-/* SECTION */
-.sec-title{font-family:var(--fh);font-size:19px;font-weight:800;margin-bottom:4px}
-.sec-sub{font-size:12px;color:var(--muted);margin-bottom:16px;line-height:1.5}
-
 /* CARDS */
-.card{background:var(--s1);border-radius:13px;margin-bottom:10px;overflow:hidden;border-left:4px solid}
-.card-hdr{display:flex;justify-content:space-between;align-items:center;padding:12px 13px;cursor:pointer}
-.c-code{font-family:var(--fh);font-size:13px;font-weight:700}
-.c-name{font-size:12px;color:#aaa;display:block;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
-.prog-txt{font-size:11px;color:var(--muted)}
-.prog-bar{height:3px;background:rgba(255,255,255,0.07)}
-.prog-fill{height:100%;border-radius:2px;transition:width .5s}
-.topic-list{padding:4px 10px 12px}
-.t-row{display:flex;align-items:flex-start;gap:10px;padding:8px 7px;border-radius:8px;cursor:pointer;margin-bottom:1px;transition:background .15s}
-.t-row:active{background:rgba(255,255,255,0.05)!important}
-.chk{width:18px;height:18px;border-radius:5px;border:2px solid;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .2s;font-size:11px;color:#fff;font-weight:700}
-.t-txt{font-size:12px;line-height:1.5;color:#dde;transition:all .2s}
-.t-txt.done{text-decoration:line-through;opacity:.4}
-
+.card{background:#161a27;border-radius:12px;margin-bottom:10px;overflow:hidden;border-left:4px solid}
+.card-top{display:flex;justify-content:space-between;align-items:center;padding:12px 13px;cursor:pointer}
+.c-code{font-family:'Syne',sans-serif;font-size:13px;font-weight:700}
+.c-name{font-size:11px;color:#888;margin-top:2px;display:block}
+.c-prog{font-size:11px;color:#6b7280}
+.pbar{height:3px;background:rgba(255,255,255,0.07)}
+.pfill{height:100%;transition:width .4s}
+.topics{padding:6px 10px 12px}
+.trow{display:flex;align-items:flex-start;gap:10px;padding:8px 6px;border-radius:8px;cursor:pointer;transition:background .15s}
+.trow:active{background:rgba(255,255,255,0.06)}
+.chk{width:18px;height:18px;border-radius:4px;border:2px solid;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;transition:all .2s}
+.tlabel{font-size:12px;line-height:1.5;color:#dde}
+.tlabel.done{text-decoration:line-through;opacity:.4}
+/* CHIPS */
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.chip{padding:5px 11px;border-radius:20px;border:1.5px solid;font-size:11px;font-weight:700;cursor:pointer;font-family:'Syne',sans-serif;transition:all .2s}
 /* TIMETABLE */
-.tt-grid{display:flex;flex-direction:column;gap:8px}
-.day-block{background:var(--s1);border-radius:12px;overflow:hidden;border:1.5px solid var(--bdr)}
+.day-block{background:#161a27;border-radius:12px;margin-bottom:10px;overflow:hidden;border:1.5px solid rgba(255,255,255,0.08)}
 .day-block.today{border-color:rgba(255,255,255,0.25)}
-.day-lbl{font-family:var(--fh);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:9px 13px 6px;color:var(--muted);display:flex;align-items:center;gap:6px}
-.day-lbl.today-lbl{color:#FFD700}
-.slots{padding:0 10px 10px;display:flex;flex-direction:column;gap:6px}
-.slot{display:flex;align-items:center;gap:8px;background:var(--s2);border-radius:9px;padding:9px 10px}
+.day-name{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:10px 13px 6px;color:#6b7280}
+.day-name.today{color:#FFD700}
+.day-slots{padding:0 10px 10px;display:flex;flex-direction:column;gap:6px}
+.slot{display:flex;align-items:center;gap:8px;background:#1d2236;border-radius:9px;padding:9px 10px}
 .slot-info{flex:1;min-width:0}
-.slot-time{font-family:var(--fh);font-size:11px;font-weight:700;margin-bottom:2px}
-.slot-course{font-size:12px;color:#bbb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.slot-alarm{font-size:10px;margin-top:2px}
-.slot-alarm.on{color:#4CAF82}
-.slot-alarm.off{color:#555}
-.slot-btns{display:flex;gap:5px;flex-shrink:0}
-.ic-btn{width:30px;height:30px;border-radius:7px;border:none;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
-.edit-ic{background:rgba(255,255,255,0.1);color:#fff}
-.del-ic{background:rgba(255,68,68,0.15);color:#ff7070}
-.add-slot{display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,0.04);border:1.5px dashed rgba(255,255,255,0.12);border-radius:9px;padding:9px;cursor:pointer;font-size:12px;color:#888;transition:all .15s}
-.add-slot:active{background:rgba(255,255,255,0.08)}
-
-/* MODAL */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.78);display:flex;align-items:flex-end;justify-content:center;z-index:999;animation:fi .2s}
-.modal{background:#1e2438;border-radius:20px 20px 0 0;padding:20px 16px calc(var(--sb) + 28px);width:100%;max-width:700px;animation:su .3s cubic-bezier(.4,0,.2,1)}
-.modal-title{font-family:var(--fh);font-size:16px;font-weight:800;margin-bottom:16px}
-.lbl{font-size:11px;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
-select,input[type=time],input[type=text]{width:100%;padding:10px 11px;border-radius:8px;background:var(--bg);border:1.5px solid var(--bdr);color:#eee;font-size:13px;margin-bottom:12px;font-family:var(--fb)}
-input[type=time]{appearance:auto;-webkit-appearance:auto}
-.modal-row{display:flex;gap:10px;margin-top:4px}
-.mbtn{flex:1;padding:12px;border:none;border-radius:9px;cursor:pointer;font-size:14px;font-weight:700;font-family:var(--fb)}
-.mbtn.cancel{background:rgba(255,255,255,0.08);color:#ccc}
-.mbtn.save{background:linear-gradient(90deg,#3a6fd8,#5a4fc7);color:#fff}
-.mbtn.save:disabled{opacity:.35}
-
-/* REMINDERS TAB */
-.r-card{background:var(--s1);border-radius:13px;padding:16px;margin-bottom:12px}
-.r-icon{font-size:26px;margin-bottom:8px}
-.r-title{font-family:var(--fh);font-size:15px;font-weight:700;margin-bottom:4px}
-.r-sub{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:12px}
-.notif-btn{width:100%;padding:13px;background:linear-gradient(90deg,#3a6fd8,#6b4fc7);border:none;color:#fff;border-radius:10px;cursor:pointer;font-size:14px;font-weight:700;font-family:var(--fh)}
-.notif-st{margin-top:8px;font-size:12px;color:#888;text-align:center}
-.alarm-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--bdr)}
-.alarm-row:last-child{border-bottom:none}
-.alarm-left .a-day{font-size:11px;color:var(--muted);margin-bottom:2px}
-.alarm-left .a-info{font-size:13px;font-weight:600}
-.alarm-left .a-time{font-size:11px;color:var(--muted);margin-top:2px}
-.badge{padding:4px 9px;border-radius:20px;font-size:10px;font-weight:700;font-family:var(--fh)}
+.slot-time{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;margin-bottom:2px}
+.slot-course{font-size:12px;color:#aaa}
+.slot-note{font-size:10px;color:#555;margin-top:2px}
+.slot-alarm{font-size:10px;margin-top:3px}
+.slot-btns{display:flex;gap:5px}
+.ibtn{width:30px;height:30px;border-radius:7px;border:none;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
+.add-row{display:flex;align-items:center;justify-content:center;gap:5px;background:rgba(255,255,255,0.03);border:1.5px dashed rgba(255,255,255,0.1);border-radius:9px;padding:9px;cursor:pointer;font-size:12px;color:#444;margin-top:2px}
+/* ALARMS */
+.acard{background:#161a27;border-radius:12px;padding:16px;margin-bottom:12px}
+.atitle{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:10px}
+.arow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06)}
+.arow:last-child{border-bottom:none}
+.aday{font-size:10px;color:#6b7280;margin-bottom:2px}
+.acode{font-size:13px;font-weight:600;font-family:'Syne',sans-serif}
+.atime{font-size:11px;color:#6b7280;margin-top:2px}
+.badge{padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;font-family:'Syne',sans-serif;cursor:pointer}
 .badge.on{background:rgba(76,175,82,0.2);color:#4CAF82}
 .badge.off{background:rgba(255,255,255,0.06);color:#555}
-.s-row{display:flex;align-items:center;gap:9px;margin-bottom:8px}
-.s-code{font-size:10px;font-weight:700;width:65px;flex-shrink:0;font-family:var(--fh)}
-.s-bg{flex:1;height:6px;background:rgba(255,255,255,0.06);border-radius:3px}
-.s-fill{height:100%;border-radius:3px;transition:width .5s}
-.s-pct{font-size:10px;color:var(--muted);width:26px;text-align:right}
-
-/* CHIPS */
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:13px}
-.chip{padding:5px 11px;border-radius:20px;border:1.5px solid;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;font-family:var(--fh)}
-
-@keyframes fi{from{opacity:0}to{opacity:1}}
-@keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.notif-btn{width:100%;padding:13px;background:linear-gradient(90deg,#3a6fd8,#5a4fc7);border:none;color:#fff;border-radius:10px;cursor:pointer;font-size:14px;font-weight:700;font-family:'Syne',sans-serif;margin-bottom:8px}
+.srow{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.scode{font-size:10px;font-weight:700;width:60px;flex-shrink:0;font-family:'Syne',sans-serif}
+.sbg{flex:1;height:5px;background:rgba(255,255,255,0.06);border-radius:3px}
+.sfill{height:100%;border-radius:3px;transition:width .4s}
+.spct{font-size:10px;color:#6b7280;width:26px;text-align:right}
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);display:flex;align-items:flex-end;justify-content:center;z-index:99}
+.modal{background:#1e2438;border-radius:20px 20px 0 0;padding:20px 16px 36px;width:100%;max-width:600px}
+.mtitle{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-bottom:16px}
+.mlbl{font-size:11px;color:#6b7280;margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+select,input[type=time],input[type=text]{width:100%;padding:11px;border-radius:8px;background:#0d0f18;border:1.5px solid rgba(255,255,255,0.1);color:#eee;font-size:14px;margin-bottom:13px;font-family:'DM Sans',sans-serif}
+.mbtns{display:flex;gap:10px;margin-top:4px}
+.mbtn{flex:1;padding:13px;border:none;border-radius:9px;cursor:pointer;font-size:14px;font-weight:700;font-family:'DM Sans',sans-serif}
+.mbtn.c{background:rgba(255,255,255,0.08);color:#ccc}
+.mbtn.s{background:linear-gradient(90deg,#3a6fd8,#5a4fc7);color:#fff}
+.mbtn.s:disabled{opacity:.3}
+.hidden{display:none}
 </style>
 </head>
 <body>
-<div id="app">
-  <div class="hdr">
-    <div class="hdr-left">
-      <svg class="logo" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M6 4C5.44772 4 5 4.44772 5 5V27C5 27.5523 5.44772 28 6 28H26C26.5523 28 27 27.5523 27 27V5C27 4.44772 26.5523 4 26 4H6Z" fill="#4f8ef7" opacity="0.2" stroke="#4f8ef7" stroke-width="1.5"/>
-        <line x1="16" y1="6" x2="16" y2="26" stroke="#4f8ef7" stroke-width="1.5"/>
-        <line x1="9" y1="10" x2="23" y2="10" stroke="#4f8ef7" stroke-width="1" opacity="0.6"/>
-        <line x1="9" y1="14" x2="23" y2="14" stroke="#4f8ef7" stroke-width="1" opacity="0.6"/>
-        <line x1="9" y1="18" x2="23" y2="18" stroke="#4f8ef7" stroke-width="1" opacity="0.6"/>
-        <line x1="9" y1="22" x2="23" y2="22" stroke="#4f8ef7" stroke-width="1" opacity="0.6"/>
-        <circle cx="28.5" cy="3.5" r="2.5" fill="#FFD700"/>
-      </svg>
-      <div class="hdr-txt">
-        <h1>UniTracker</h1>
-        <p>2nd Semester · University of Lagos</p>
-      </div>
-    </div>
-    <div class="ring-wrap">
-      <svg width="52" height="52" viewBox="0 0 36 36">
-        <circle cx="18" cy="18" r="15.9" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="3"/>
-        <circle id="arc" cx="18" cy="18" r="15.9" fill="none" stroke="#4f8ef7" stroke-width="3" stroke-dasharray="0 100" stroke-linecap="round"/>
-      </svg>
-      <div class="ring-center">
-        <span class="ring-pct" id="rpct">0%</span>
-        <span class="ring-sub" id="rsub">0/0</span>
-      </div>
+
+<div class="hdr">
+  <div style="display:flex;align-items:center;gap:11px">
+    <svg width="42" height="42" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;border-radius:12px">
+      <rect width="100" height="100" rx="22" fill="#0d0f18"/>
+      <circle cx="50" cy="50" r="38" fill="none" stroke="#4f8ef7" stroke-width="5"/>
+      <text x="50" y="57" text-anchor="middle" font-family="sans-serif" font-weight="900" font-size="28" fill="white">UT</text>
+      <circle cx="72" cy="28" r="11" fill="#4CAF82"/>
+      <text x="72" y="33" text-anchor="middle" font-family="sans-serif" font-weight="900" font-size="14" fill="white">✓</text>
+    </svg>
+    <div>
+      <h1>UniTracker</h1>
+      <p>2nd Semester · University of Lagos</p>
     </div>
   </div>
-
-  <div class="tabs">
-    <button class="tab on" data-tab="courses">📚 Courses</button>
-    <button class="tab" data-tab="timetable">📅 Timetable</button>
-    <button class="tab" data-tab="alarms">🔔 Alarms</button>
+  <div class="ring">
+    <svg width="52" height="52" viewBox="0 0 36 36">
+      <circle cx="18" cy="18" r="15.9" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="3"/>
+      <circle id="arc" cx="18" cy="18" r="15.9" fill="none" stroke="#4f8ef7" stroke-width="3" stroke-dasharray="0 100" stroke-linecap="round"/>
+    </svg>
+    <div class="ring-mid"><span id="rpct">0%</span><span id="rsub">0/0</span></div>
   </div>
-
-  <div id="pane-courses" class="pane on"></div>
-  <div id="pane-timetable" class="pane"></div>
-  <div id="pane-alarms" class="pane"></div>
 </div>
 
-<!-- SLOT MODAL -->
-<div id="overlay" class="overlay" style="display:none">
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('courses')">📚 Courses</button>
+  <button class="tab" onclick="switchTab('timetable')">📅 Timetable</button>
+  <button class="tab" onclick="switchTab('alarms')">🔔 Alarms</button>
+</div>
+
+<div id="pane-courses" class="pane active"></div>
+<div id="pane-timetable" class="pane"></div>
+<div id="pane-alarms" class="pane"></div>
+
+<div id="overlay" class="overlay hidden">
   <div class="modal">
-    <div class="modal-title" id="m-title">Add Class</div>
-    <div class="lbl">Day</div>
+    <div class="mtitle" id="mtitle">Add Class</div>
+    <div class="mlbl">Day</div>
     <select id="m-day">
       <option value="">-- Select day --</option>
       <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
       <option>Thursday</option><option>Friday</option><option>Saturday</option>
     </select>
-    <div class="lbl">Time</div>
+    <div class="mlbl">Time</div>
     <input type="time" id="m-time"/>
-    <div class="lbl">Course</div>
-    <select id="m-course">
-      <option value="">-- Select course --</option>
-    </select>
-    <div class="lbl">Note (optional)</div>
-    <input type="text" id="m-note" placeholder="e.g. Venue: LT1, Bring calculator"/>
-    <div class="modal-row">
-      <button class="mbtn cancel" id="m-cancel">Cancel</button>
-      <button class="mbtn save" id="m-save" disabled>Save</button>
+    <div class="mlbl">Course</div>
+    <select id="m-course"><option value="">-- Select course --</option></select>
+    <div class="mlbl">Note (optional)</div>
+    <input type="text" id="m-note" placeholder="e.g. LT1, Bring calculator"/>
+    <div class="mbtns">
+      <button class="mbtn c" onclick="closeModal()">Cancel</button>
+      <button class="mbtn s" id="msave" onclick="saveSlot()" disabled>Save</button>
     </div>
   </div>
 </div>
 
 <script>
-const COURSES=[
-  {id:"GST112",code:"GST 112",title:"Nigerian Peoples & Cultures",units:2,color:"#E8A838",topics:["Nigerian history & culture up to 1800 – Yoruba peoples","Nigerian history & culture up to 1800 – Hausa peoples","Nigerian history & culture up to 1800 – Igbo peoples","Peoples & culture of central sudanic zone – Fulani peoples","Peoples & cultures of the sahel – Kanem-Bornu to present","Peoples & cultures of the sahel – Senegambia & Mali","Peoples & cultures from Guinea coast – Delta peoples","Other peoples & cultures of present-day Nigeria – history & culture"]},
-  {id:"CHM102",code:"CHM 102",title:"General Chemistry II",units:2,color:"#4CAF82",topics:["Historical survey of organic chemistry","Fullerenes – 4th allotrope of carbon & nanochemistry","Electronic theory in organic chemistry","Isolation & purification of organic compounds","Quantitative analysis – acid-base titrations","Redox titrations & gravimetric analysis","Qualitative analysis – cations (group I-V)","Qualitative analysis – anions"]},
-  {id:"CHM108",code:"CHM 108",title:"General Practical Chemistry II",units:1,color:"#56A8D8",topics:["Lab rules & safety procedures","Ignition, boiling point & melting point tests","Solubility tests on organic compounds","Elemental tests on compounds","Functional group analysis – acidic & basic groups","Functional group analysis – carbonyl & other groups","Acid-base titrations practical","Redox titrations & gravimetric analysis practical"]},
-  {id:"MTH102",code:"MTH 102",title:"Elementary Mathematics II (Calculus)",units:2,color:"#9B6BD4",topics:["Functions of a real variable & graphs","Limits & idea of continuity","The derivative as limit of rate of change","Techniques of differentiation","Maxima, minima & extreme curve sketching","Integration – indefinite & definite","Application of integration – area under curves","Differential equations & modelling"]},
-  {id:"PHY102",code:"PHY 102",title:"General Physics II (Electricity & Magnetism)",units:2,color:"#E05F5F",topics:["Electrostatics – charge properties & methods of charging","Coulomb's law & superposition principle","Electric field & electric potential","Gauss's law & capacitance","Electric dipoles & polarization","Current & circuits – EMF & resistance","Magnetism – magnetic field & force on moving charges","Electromagnetic induction"]},
-  {id:"PHY104",code:"PHY 104",title:"General Physics IV (Waves & Optics)",units:2,color:"#E8884A",topics:["Simple harmonic motion – energy in vibrating systems","Damped SHM, Q values & power response","Forced SHM, resonance & transients","Coupled SHM & normal modes","Types & properties of waves – propagation","Wave interference & diffraction","Doppler effect & wave phenomena","Light as wave – reflection, refraction & polarization"]},
-  {id:"GET102",code:"GET 102",title:"Engineering Graphics & Solid Modelling I",units:2,color:"#3ABAB4",topics:["Introduction to design thinking & engineering graphics","First & third angle orthogonal projections","Isometric projections","Sectioning & conventional practices","Conic sections & development of surfaces","Introduction to CAD software","3D modelling basics","Assembly & technical drawings"]},
-  {id:"STA112",code:"STA 112",title:"Probability I",units:3,color:"#C45FC9",topics:["Permutation & combination","Concepts & principles of probability","Random variables","Probability & distribution functions","Binomial distribution","Geometric & Poisson distributions","Normal distribution","Sampling distributions & central limit theorem"]},
-  {id:"MTH103",code:"MTH 103",title:"Elementary Mathematics III (Vectors & Dynamics)",units:2,color:"#D4885A",topics:["Geometric representation of vectors in 1-3 dimensions","Direction cosines, addition & scalar multiplication","Linear independence, scalar & vector products","Differentiation & integration of vectors","Motion in 2D & 3D – kinematics","Newton's laws & dynamics","Circular & projectile motion","Conservation of momentum & energy"]}
+var COURSES = [
+  {id:"GST112",code:"GST 112",color:"#E8A838",title:"Nigerian Peoples & Cultures",units:2,topics:["Nigerian history & culture – Yoruba peoples","Nigerian history & culture – Hausa peoples","Nigerian history & culture – Igbo peoples","Peoples & cultures of minority ethnic groups","Nigeria under colonial rule","Amalgamation of 1914","Political parties & nationalist movement","Nation building – Military intervention","Nigerian Civil War","Indigenous trade & market system","Social justice & classification of law","Judiciary & fundamental human rights","Nigerian norms, values & citizenship","Indigenous languages & development","Cultism, kidnapping & social vices","Re-orientation strategies","Current socio-political developments"]},
+  {id:"CHM102",code:"CHM 102",color:"#4CAF82",title:"General Chemistry II",units:2,topics:["Historical survey of organic chemistry","Fullerenes & nanochemistry","Electronic theory in organic chemistry","Isolation & purification of organic compounds","Qualitative & quantitative structure determination","Nomenclature & functional group classes","Reaction mechanism & kinetics","Stereochemistry","Chemistry of alkanes & alkenes","Chemistry of alkynes, alcohols & ethers","Chemistry of amines, alkyl halides & nitriles","Chemistry of aldehydes, ketones & carboxylic acids","Chemistry of selected metals & non-metals","Comparative chemistry – Group IA & IIA","Comparative chemistry – Group IVA","Introduction to transition metal chemistry"]},
+  {id:"CHM108",code:"CHM 108",color:"#56A8D8",title:"General Practical Chemistry II",units:1,topics:["Lab rules & safety procedures","Ignition, boiling & melting point tests","Solubility tests on organic compounds","Elemental tests on compounds","Functional group analysis – acidic","Functional group analysis – basic","Functional group analysis – neutral","Quantitative analysis – volumetric methods"]},
+  {id:"MTH102",code:"MTH 102",color:"#9B6BD4",title:"Elementary Mathematics II (Calculus)",units:2,topics:["Functions of a real variable & graphs","Limits & continuity","Derivative as limit of rate of change","Techniques of differentiation","Maxima, minima & curve sketching","Integration as inverse of differentiation","Definite integrals & reduction formulae","Integration – areas","Integration – volumes","Trapezium rule","Simpson's rule"]},
+  {id:"PHY102",code:"PHY 102",color:"#E05F5F",title:"General Physics II (Electricity & Magnetism)",units:2,topics:["Electrostatics – charge & charging methods","Coulomb's law & superposition","Electric field & potential","Gauss's law & capacitance","Electric dipoles & energy","DC circuits & Ohm's law","Resistor combinations & circuit analysis","Magnetic fields & Lorentz force","Biot-Savart & Ampère's laws","Magnetic dipoles & energy","Electromagnetic induction & Lenz's law","Self & mutual inductances; transformers","Maxwell's equations & EM waves","AC voltages & currents in R, C & L"]},
+  {id:"PHY104",code:"PHY 104",color:"#E8884A",title:"General Physics IV (Waves & Optics)",units:2,topics:["Simple harmonic motion","Damped SHM & Q values","Forced SHM & resonance","Coupled SHM & normal modes","Types & properties of waves","Superposition, interference & diffraction","Dispersion, polarization & interfaces","Wave energy & 1-D wave equation","2-D & 3-D wave equations","Echo, beats & Doppler effect","Sound in gases, solids & liquids","Nature & propagation of light","Internal reflection & scattering","Thin lenses & optical instruments","Wave nature of light – Huygens & diffraction"]},
+  {id:"GET102",code:"GET 102",color:"#3ABAB4",title:"Engineering Graphics & Solid Modelling I",units:2,topics:["Design thinking & engineering graphics","First & third angle projections","Isometric projections","Sectioning & conventional practices","Conic sections & development","Freehand & guided sketching","Visualisation & solid modelling","User interfaces & workspaces","Viewports & sectioning to shop drawings","Sheet metal & surface modelling","Material selection & rendering","Prototyping with Fusion 360 / SolidWorks"]},
+  {id:"STA112",code:"STA 112",color:"#C45FC9",title:"Probability I",units:3,topics:["Permutation & combination","Concepts of probability","Random variables","Probability & distribution functions","Binomial distribution","Geometric & Poisson distributions","Normal & sampling distributions","Exploratory data analysis"]},
+  {id:"MTH103",code:"MTH 103",color:"#D4885A",title:"Elementary Mathematics III (Vectors & Dynamics)",units:2,topics:["Vectors in 1–3 dimensions","Direction cosines & scalar multiplication","Linear independence & vector products","Differentiation & integration of vectors","2-D coordinate geometry","Parabola, ellipse & hyperbola","Kinematics – velocity & acceleration","Force, momentum & laws of motion","Projectiles & resisted vertical motion","Elastic string & simple pendulum","Impulse & impact of spheres"]}
 ];
 
-const DAYS=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-const SK="unitracker_v3";
-const ALARM_BEFORE=15;
+var DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+var SK = "ut_v6";
+var ALARM_MIN = 15;
+var state, expanded, activeCourse, editIdx, alarmTimers;
 
-let state=load(),expanded={},activeCourse=null,editIdx=null;
-function load(){try{const r=localStorage.getItem(SK);if(r)return JSON.parse(r);}catch{}return{checked:{},slots:[]};}
-function save(){try{localStorage.setItem(SK,JSON.stringify(state));}catch{}}
-function ensureChecked(){COURSES.forEach(c=>{if(!state.checked[c.id]){state.checked[c.id]={};c.topics.forEach((_,i)=>state.checked[c.id][i]=false);}});}
-ensureChecked();
-
-function getP(id){const done=Object.values(state.checked[id]||{}).filter(Boolean).length;return{done,total:COURSES.find(c=>c.id===id).topics.length};}
-function totalP(){let d=0,t=0;COURSES.forEach(c=>{const p=getP(c.id);d+=p.done;t+=p.total;});return{done:d,total:t};}
-function todayName(){return DAYS[([6,0,1,2,3,4,5])[new Date().getDay()]]||'Monday';}
-function fmt12(t){if(!t)return'';const[h,m]=t.split(':').map(Number);const ap=h>=12?'PM':'AM';return`${h%12||12}:${String(m).padStart(2,'0')} ${ap}`;}
-
-function renderRing(){const{done,total}=totalP();const pct=total?Math.round(done/total*100):0;document.getElementById('rpct').textContent=pct+'%';document.getElementById('rsub').textContent=done+'/'+total;document.getElementById('arc').setAttribute('stroke-dasharray',pct+' '+(100-pct));}
-
-function renderCourses(){
-  const el=document.getElementById('pane-courses');
-  let h='<div class="chips">';
-  COURSES.forEach(c=>{const p=getP(c.id),pct=Math.round(p.done/p.total*100),on=activeCourse===c.id;h+=`<button class="chip" style="border-color:${c.color};background:${on?c.color:'transparent'};color:${on?'#fff':c.color}" onclick="setActive('${c.id}')">${c.code} <span style="font-size:10px;opacity:0.7">${pct}%</span></button>`;});
-  h+='</div>';
-  COURSES.forEach(c=>{if(activeCourse&&activeCourse!==c.id)return;const p=getP(c.id),pct=Math.round(p.done/p.total*100),exp=expanded[c.id];h+=`<div class="card" style="border-left-color:${c.color}"><div class="card-hdr" onclick="toggleExp('${c.id}')"><div style="flex:1;min-width:0"><span class="c-code" style="color:${c.color}">${c.code}</span><span class="c-name">${c.title} <span style="color:#555;font-size:10px">(${c.units}u)</span></span></div><div class="card-right"><span class="prog-txt">${p.done}/${p.total}</span><span style="font-size:10px;color:var(--muted)">${exp?'▲':'▼'}</span></div></div><div class="prog-bar"><div class="prog-fill" style="width:${pct}%;background:${c.color}"></div></div>${exp?renderTopics(c):''}</div>`;});
-  if(activeCourse)h+=`<button onclick="setActive(null)" style="display:block;margin:10px auto 0;background:transparent;border:1px solid var(--bdr);color:var(--muted);padding:8px 20px;border-radius:8px;cursor:pointer;font-size:12px">Clear filter</button>`;
-  el.innerHTML=h;
+function init() {
+  expanded = {};
+  activeCourse = null;
+  editIdx = null;
+  alarmTimers = [];
+  try {
+    var raw = localStorage.getItem(SK);
+    state = raw ? JSON.parse(raw) : null;
+  } catch(e) { state = null; }
+  if (!state || typeof state !== 'object') state = {checked:{}, slots:[]};
+  if (!state.checked) state.checked = {};
+  if (!Array.isArray(state.slots)) state.slots = [];
+  COURSES.forEach(function(c) {
+    if (!state.checked[c.id]) {
+      state.checked[c.id] = {};
+      c.topics.forEach(function(_,i){ state.checked[c.id][i] = false; });
+    }
+  });
+  renderRing();
+  renderCourses();
 }
 
-function renderTopics(c){let h='<div class="topic-list">';c.topics.forEach((t,i)=>{const done=state.checked[c.id]?.[i];h+=`<div class="t-row" style="background:${done?c.color+'16':'transparent'}" onclick="toggleT('${c.id}',${i})"><div class="chk" style="border-color:${c.color};background:${done?c.color:'transparent'}">${done?'✓':''}</div><span class="t-txt ${done?'done':''}">${t}</span></div>`;});return h+'</div>';}
-
-function setActive(id){activeCourse=id;if(id)expanded[id]=true;renderCourses();}
-function toggleExp(id){expanded[id]=!expanded[id];renderCourses();}
-function toggleT(cid,idx){state.checked[cid][idx]=!state.checked[cid][idx];save();renderRing();renderCourses();renderAlarms();}
-
-function renderTimetable(){
-  const today=todayName();
-  let h=`<div class="sec-title">Class Timetable</div><div class="sec-sub">Add your classes below. Tap + to add a slot — you can update times anytime.</div><div class="tt-grid">`;
-  DAYS.forEach(day=>{const isToday=day===today;const daySlots=state.slots.filter(s=>s.day===day).sort((a,b)=>a.time.localeCompare(b.time));h+=`<div class="day-block ${isToday?'today':''}"><div class="day-lbl ${isToday?'today-lbl':''}">${day}${isToday?' 📍':''}</div><div class="slots">`;daySlots.forEach((sl,ri)=>{const idx=state.slots.indexOf(sl);const course=COURSES.find(c=>c.id===sl.courseId);const alarmOn=sl.alarmOn!==false;h+=`<div class="slot"><div class="slot-info"><div class="slot-time" style="color:${course?.color||'#aaa'}">${fmt12(sl.time)} · ${course?.code||sl.courseId}</div><div class="slot-course">${course?.title||''}</div>${sl.note?`<div style="font-size:10px;color:#666;margin-top:2px">📝 ${sl.note}</div>`:''}<div class="slot-alarm ${alarmOn?'on':'off'}">${alarmOn?'🔔 Alarm set (15 min before)':'🔕 Alarm off'}</div></div><div class="slot-btns"><button class="ic-btn edit-ic" onclick="openModal(${idx})" title="Edit">✏️</button><button class="ic-btn" style="background:${alarmOn?'rgba(76,175,82,0.15)':'rgba(255,255,255,0.07)'};color:${alarmOn?'#4CAF82':'#666'}" onclick="toggleAlarm(${idx})" title="Toggle alarm">${alarmOn?'🔔':'🔕'}</button><button class="ic-btn del-ic" onclick="delSlot(${idx})" title="Delete">✕</button></div></div>`;});h+=`<div class="add-slot" onclick="openModal(null,'${day}')">＋ Add class</div></div></div>`;});h+='</div>';document.getElementById('pane-timetable').innerHTML=h;
+function save() {
+  try { localStorage.setItem(SK, JSON.stringify(state)); } catch(e){}
 }
 
-function toggleAlarm(idx){state.slots[idx].alarmOn=!(state.slots[idx].alarmOn!==false);save();renderTimetable();renderAlarms();scheduleAlarms();}
-function delSlot(idx){if(!confirm('Delete this class slot?'))return;state.slots.splice(idx,1);save();renderTimetable();renderAlarms();scheduleAlarms();}
-
-function openModal(idx,preDay){
-  editIdx=idx;const sl=idx!==null?state.slots[idx]:null;document.getElementById('m-title').textContent=sl?'Edit Class':'Add Class';
-  const ds=document.getElementById('m-day');ds.value=sl?sl.day:(preDay||'');
-  document.getElementById('m-time').value=sl?sl.time:'';document.getElementById('m-note').value=sl?sl.note||'':'';
-  const cs=document.getElementById('m-course');cs.innerHTML='<option value="">-- Select course --</option>';
-  COURSES.forEach(c=>{const o=document.createElement('option');o.value=c.id;o.textContent=c.code+' – '+c.title;if(sl&&sl.courseId===c.id)o.selected=true;cs.appendChild(o);});
-  checkSave();document.getElementById('overlay').style.display='flex';
+function getP(id) {
+  var done = 0, c = COURSES.find(function(x){return x.id===id;});
+  var ch = state.checked[id] || {};
+  c.topics.forEach(function(_,i){ if(ch[i]) done++; });
+  return {done:done, total:c.topics.length};
 }
 
-function checkSave(){const ok=document.getElementById('m-day').value&&document.getElementById('m-time').value&&document.getElementById('m-course').value;document.getElementById('m-save').disabled=!ok;}
-['m-day','m-time','m-course'].forEach(id=>document.getElementById(id).addEventListener('change',checkSave));
-document.getElementById('m-cancel').addEventListener('click',()=>{document.getElementById('overlay').style.display='none';});
-document.getElementById('overlay').addEventListener('click',function(e){if(e.target===this)this.style.display='none';});
-document.getElementById('m-save').addEventListener('click',()=>{const day=document.getElementById('m-day').value;const time=document.getElementById('m-time').value;const courseId=document.getElementById('m-course').value;const note=document.getElementById('m-note').value.trim();const slot={day,time,courseId,note,alarmOn:true};if(editIdx!==null)state.slots[editIdx]=slot;else state.slots.push(slot);save();document.getElementById('overlay').style.display='none';renderTimetable();renderAlarms();scheduleAlarms();});
-
-function renderAlarms(){
-  const el=document.getElementById('pane-alarms');const today=todayName();const sorted=[...state.slots].sort((a,b)=>{const di=DAYS.indexOf(a.day)-DAYS.indexOf(b.day);return di!==0?di:a.time.localeCompare(b.time);});
-  const notifGranted=('Notification' in window)&&Notification.permission==='granted';
-  let alarmRows='';
-  if(sorted.length===0){alarmRows=`<div style="font-size:13px;color:#555;font-style:italic;padding:8px 0">No classes added yet — go to Timetable to add slots.</div>`;}else{sorted.forEach(sl=>{const idx=state.slots.indexOf(sl);const course=COURSES.find(c=>c.id===sl.courseId);const on=sl.alarmOn!==false;const isToday=sl.day===today;alarmRows+=`<div class="alarm-row"><div class="alarm-left"><div class="a-day">${sl.day}${isToday?' · Today':''}</div><div class="a-info" style="color:${course?.color||'#aaa'}">${course?.code||sl.courseId}</div><div class="a-time">🕐 ${fmt12(sl.time)} · 🔔 fires at ${fireTime(sl.time)}</div></div><span class="badge ${on?'on':'off'}" style="cursor:pointer" onclick="toggleAlarm(${idx})">${on?'ON':'OFF'}</span></div>`;});}
-  const todaySlots=state.slots.filter(s=>s.day===today).sort((a,b)=>a.time.localeCompare(b.time));let todayHtml='';
-  if(todaySlots.length){todayHtml=todaySlots.map(sl=>{const c=COURSES.find(x=>x.id===sl.courseId);return`<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div style="width:3px;height:36px;border-radius:2px;background:${c?.color||'#aaa'};flex-shrink:0"></div><div><div style="font-size:12px;font-weight:700;font-family:var(--fh);color:${c?.color||'#aaa'}">${c?.code} · ${fmt12(sl.time)}</div><div style="font-size:11px;color:#aaa">${c?.title}</div></div></div>`;}).join('');}else{todayHtml=`<div style="font-size:13px;color:#555;font-style:italic">No classes scheduled for today.</div>`;}
-  let sumRows='';COURSES.forEach(c=>{const p=getP(c.id),pct=Math.round(p.done/p.total*100);sumRows+=`<div class="s-row"><span class="s-code" style="color:${c.color}">${c.code}</span><div class="s-bg"><div class="s-fill" style="width:${pct}%;background:${c.color}"></div></div><span class="s-pct">${pct}%</span></div>`;});
-  el.innerHTML=`<div class="sec-title">Alarms</div><div class="sec-sub">Notifications fire 15 min before each class. Toggle per slot in Timetable or here.</div><div class="r-card"><div class="r-icon">🔔</div><div class="r-title">Notification Permission</div><div class="r-sub">${notifGranted?'Notifications are enabled. Alarms will fire when the app is open or installed on your device.':'Enable notifications so alarms can fire 15 minutes before your classes.'}</div>${notifGranted?`<div style="font-size:13px;color:#4CAF82;font-weight:600">✅ Notifications active</div>`:`<button class="notif-btn" onclick="reqNotif()">Enable Notifications</button>`}<div class="notif-st" id="notif-st"></div></div><div class="r-card"><div class="r-title" style="margin-bottom:12px">📅 Today (${today})</div>${todayHtml}</div><div class="r-card"><div class="r-title" style="margin-bottom:14px">⏰ All Class Alarms</div>${alarmRows}</div><div class="r-card"><div class="r-title" style="margin-bottom:12px">📊 Topic Progress</div>${sumRows}</div>`;
+function totalP() {
+  var d=0,t=0;
+  COURSES.forEach(function(c){ var p=getP(c.id); d+=p.done; t+=p.total; });
+  return {done:d, total:t};
 }
 
-function fireTime(t){if(!t)return'--';const[h,m]=t.split(':').map(Number);const total=h*60+m-ALARM_BEFORE;const fh=Math.floor(((total%1440)+1440)%1440/60),fm=((total%1440)+1440)%1440%60;return fmt12(`${String(fh).padStart(2,'0')}:${String(fm).padStart(2,'0')}`);}
-async function reqNotif(){if(!('Notification' in window)){document.getElementById('notif-st').textContent='❌ Not supported in this browser.';return;}const p=await Notification.requestPermission();const st=document.getElementById('notif-st');if(p==='granted'){st.textContent='✅ Enabled!';scheduleAlarms();setTimeout(()=>renderAlarms(),800);}else st.textContent='❌ Blocked. Allow in browser/system settings.';}
-
-let alarmTimers=[];
-function scheduleAlarms(){
-  alarmTimers.forEach(clearTimeout);alarmTimers=[];if(!('Notification' in window)||Notification.permission!=='granted')return;
-  const now=new Date();state.slots.forEach(sl=>{if(sl.alarmOn===false)return;const course=COURSES.find(c=>c.id===sl.courseId);const dayIdx=DAYS.indexOf(sl.day);const[h,m]=sl.time.split(':').map(Number);const todayDow=now.getDay();const slotDow=(dayIdx+1)%7;let diff=(slotDow-todayDow+7)%7;const target=new Date(now);target.setDate(now.getDate()+diff);target.setHours(h,m-ALARM_BEFORE,0,0);if(target<=now){target.setDate(target.getDate()+7);}const delay=target-now;const tid=setTimeout(()=>{new Notification(`🔔 Class in 15 min`,{body:`${course?.code||sl.courseId} · ${sl.day} ${fmt12(sl.time)}${sl.note?'\n'+sl.note:''}`,icon:''});scheduleAlarms();},delay);alarmTimers.push(tid);});
+function todayName() {
+  var d = new Date().getDay();
+  return DAYS[[6,0,1,2,3,4,5][d]] || "Monday";
 }
 
-document.querySelectorAll('.tab').forEach(btn=>{btn.addEventListener('click',function(){document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));this.classList.add('on');const t=this.dataset.tab;document.getElementById('pane-'+t).classList.add('on');if(t==='timetable')renderTimetable();if(t==='alarms')renderAlarms();});});
+function fmt12(t) {
+  if(!t) return '';
+  var parts = t.split(':'), h=parseInt(parts[0]), m=parseInt(parts[1]);
+  var ap = h>=12?'PM':'AM';
+  return (h%12||12)+':'+(m<10?'0':'')+m+' '+ap;
+}
 
-renderRing();renderCourses();scheduleAlarms();
+function fireTime(t) {
+  if(!t) return '--';
+  var parts=t.split(':'), h=parseInt(parts[0]), m=parseInt(parts[1]);
+  var tot = h*60+m-ALARM_MIN;
+  tot = ((tot%1440)+1440)%1440;
+  var fh=Math.floor(tot/60), fm=tot%60;
+  return fmt12((fh<10?'0':'')+fh+':'+(fm<10?'0':'')+fm);
+}
+
+// ── RING ──
+function renderRing() {
+  var p = totalP();
+  var pct = p.total ? Math.round(p.done/p.total*100) : 0;
+  document.getElementById('rpct').textContent = pct+'%';
+  document.getElementById('rsub').textContent = p.done+'/'+p.total;
+  document.getElementById('arc').setAttribute('stroke-dasharray', pct+' '+(100-pct));
+}
+
+// ── TABS ──
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(function(b,i){
+    b.classList.toggle('active', ['courses','timetable','alarms'][i]===name);
+  });
+  document.querySelectorAll('.pane').forEach(function(p){
+    p.classList.remove('active');
+  });
+  document.getElementById('pane-'+name).classList.add('active');
+  if(name==='timetable') renderTimetable();
+  if(name==='alarms') renderAlarms();
+}
+
+// ── COURSES ──
+function renderCourses() {
+  var el = document.getElementById('pane-courses');
+  var h = '<div class="chips">';
+  COURSES.forEach(function(c) {
+    var p=getP(c.id), pct=Math.round(p.done/p.total*100), on=activeCourse===c.id;
+    h += '<button class="chip" style="border-color:'+c.color+';background:'+(on?c.color:'transparent')+';color:'+(on?'#fff':c.color)+'" onclick="setActive(\''+c.id+'\')">'
+      + c.code+' <span style="font-size:10px;opacity:.8">'+pct+'%</span></button>';
+  });
+  h += '</div>';
+  COURSES.forEach(function(c) {
+    if(activeCourse && activeCourse!==c.id) return;
+    var p=getP(c.id), pct=Math.round(p.done/p.total*100), exp=expanded[c.id];
+    h += '<div class="card" style="border-left-color:'+c.color+'">'
+      +'<div class="card-top" onclick="toggleExp(\''+c.id+'\')">'
+      +'<div><span class="c-code" style="color:'+c.color+'">'+c.code+'</span>'
+      +'<span class="c-name">'+c.title+' <span style="color:#444;font-size:10px">('+c.units+'u)</span></span></div>'
+      +'<div style="display:flex;align-items:center;gap:8px"><span class="c-prog">'+p.done+'/'+p.total+'</span>'
+      +'<span style="font-size:10px;color:#555">'+(exp?'▲':'▼')+'</span></div>'
+      +'</div>'
+      +'<div class="pbar"><div class="pfill" style="width:'+pct+'%;background:'+c.color+'"></div></div>'
+      +(exp ? renderTopics(c) : '')
+      +'</div>';
+  });
+  if(activeCourse) h += '<button onclick="setActive(null)" style="display:block;margin:10px auto;background:transparent;border:1px solid rgba(255,255,255,0.1);color:#6b7280;padding:8px 20px;border-radius:8px;cursor:pointer;font-size:12px">Show all courses</button>';
+  el.innerHTML = h;
+}
+
+function renderTopics(c) {
+  var h = '<div class="topics">';
+  c.topics.forEach(function(t,i) {
+    var done = state.checked[c.id] && state.checked[c.id][i];
+    h += '<div class="trow" style="background:'+(done?c.color+'15':'transparent')+'" onclick="toggleT(\''+c.id+'\','+i+')">'
+      +'<div class="chk" style="border-color:'+c.color+';background:'+(done?c.color:'transparent')+'">'+( done?'✓':'')+'</div>'
+      +'<span class="tlabel'+(done?' done':'')+'">'+t+'</span>'
+      +'</div>';
+  });
+  return h+'</div>';
+}
+
+function setActive(id) { activeCourse=id; if(id) expanded[id]=true; renderCourses(); }
+function toggleExp(id) { expanded[id]=!expanded[id]; renderCourses(); }
+function toggleT(cid,idx) {
+  if(!state.checked[cid]) state.checked[cid]={};
+  state.checked[cid][idx] = !state.checked[cid][idx];
+  save(); renderRing(); renderCourses();
+}
+
+// ── TIMETABLE ──
+function renderTimetable() {
+  var today = todayName();
+  var h = '<div style="font-family:Syne,sans-serif;font-size:19px;font-weight:800;margin-bottom:4px">Class Timetable</div>'
+    +'<div style="font-size:12px;color:#6b7280;margin-bottom:14px;line-height:1.5">Tap + Add class to fill in your schedule. You can update times anytime.</div>';
+  DAYS.forEach(function(day) {
+    var isToday = day===today;
+    var daySlots = state.slots.filter(function(s){return s.day===day;}).sort(function(a,b){return a.time.localeCompare(b.time);});
+    h += '<div class="day-block'+(isToday?' today':'')+'"><div class="day-name'+(isToday?' today':'')+'">'+day+(isToday?' 📍':'')+'</div><div class="day-slots">';
+    daySlots.forEach(function(sl) {
+      var idx = state.slots.indexOf(sl);
+      var course = COURSES.find(function(c){return c.id===sl.courseId;});
+      var alarmOn = sl.alarmOn!==false;
+      h += '<div class="slot">'
+        +'<div class="slot-info">'
+        +'<div class="slot-time" style="color:'+(course?course.color:'#aaa')+'">'+fmt12(sl.time)+' · '+(course?course.code:sl.courseId)+'</div>'
+        +'<div class="slot-course">'+(course?course.title:'')+'</div>'
+        +(sl.note?'<div class="slot-note">📝 '+sl.note+'</div>':'')
+        +'<div class="slot-alarm" style="color:'+(alarmOn?'#4CAF82':'#444')+'">'+(alarmOn?'🔔 Alarm: '+fireTime(sl.time):'🔕 Alarm off')+'</div>'
+        +'</div>'
+        +'<div class="slot-btns">'
+        +'<button class="ibtn" style="background:rgba(255,255,255,0.1);color:#fff" onclick="openModal('+idx+')">✏️</button>'
+        +'<button class="ibtn" style="background:'+(alarmOn?'rgba(76,175,82,0.15)':'rgba(255,255,255,0.06)')+';color:'+(alarmOn?'#4CAF82':'#666')+'" onclick="toggleAlarm('+idx+')">'+(alarmOn?'🔔':'🔕')+'</button>'
+        +'<button class="ibtn" style="background:rgba(255,68,68,0.15);color:#ff7070" onclick="delSlot('+idx+')">✕</button>'
+        +'</div></div>';
+    });
+    h += '<div class="add-row" onclick="openModal(null,\''+day+'\')">＋ Add class</div></div></div>';
+  });
+  document.getElementById('pane-timetable').innerHTML = h;
+}
+
+function toggleAlarm(idx) { state.slots[idx].alarmOn=!(state.slots[idx].alarmOn!==false); save(); renderTimetable(); renderAlarms(); scheduleAlarms(); }
+function delSlot(idx) { if(!confirm('Delete this class?')) return; state.slots.splice(idx,1); save(); renderTimetable(); renderAlarms(); scheduleAlarms(); }
+
+// ── MODAL ──
+function openModal(idx, preDay) {
+  editIdx = idx;
+  var sl = idx!==null ? state.slots[idx] : null;
+  document.getElementById('mtitle').textContent = sl?'Edit Class':'Add Class';
+  document.getElementById('m-day').value = sl?sl.day:(preDay||'');
+  document.getElementById('m-time').value = sl?sl.time:'';
+  document.getElementById('m-note').value = sl?sl.note||'':'';
+  var cs = document.getElementById('m-course');
+  cs.innerHTML = '<option value="">-- Select course --</option>';
+  COURSES.forEach(function(c) {
+    var o=document.createElement('option'); o.value=c.id; o.textContent=c.code+' – '+c.title;
+    if(sl&&sl.courseId===c.id) o.selected=true;
+    cs.appendChild(o);
+  });
+  checkSave();
+  document.getElementById('overlay').classList.remove('hidden');
+}
+
+function closeModal() { document.getElementById('overlay').classList.add('hidden'); }
+
+document.getElementById('overlay').addEventListener('click', function(e){ if(e.target===this) closeModal(); });
+
+function checkSave() {
+  var ok = document.getElementById('m-day').value && document.getElementById('m-time').value && document.getElementById('m-course').value;
+  document.getElementById('msave').disabled = !ok;
+}
+['m-day','m-time','m-course'].forEach(function(id){ document.getElementById(id).addEventListener('change', checkSave); });
+
+function saveSlot() {
+  var slot = {
+    day: document.getElementById('m-day').value,
+    time: document.getElementById('m-time').value,
+    courseId: document.getElementById('m-course').value,
+    note: document.getElementById('m-note').value.trim(),
+    alarmOn: true
+  };
+  if(editIdx!==null) state.slots[editIdx]=slot;
+  else state.slots.push(slot);
+  save(); closeModal(); renderTimetable(); renderAlarms(); scheduleAlarms();
+}
+
+// ── ALARMS ──
+function renderAlarms() {
+  var el = document.getElementById('pane-alarms');
+  var today = todayName();
+  var notifOk = 'Notification' in window && Notification.permission==='granted';
+  var sorted = state.slots.slice().sort(function(a,b){
+    var di=DAYS.indexOf(a.day)-DAYS.indexOf(b.day);
+    return di!==0?di:a.time.localeCompare(b.time);
+  });
+  var alarmRows = sorted.length===0
+    ? '<div style="font-size:13px;color:#555;font-style:italic">No classes yet — add them in Timetable.</div>'
+    : sorted.map(function(sl){
+        var idx=state.slots.indexOf(sl), c=COURSES.find(function(x){return x.id===sl.courseId;}), on=sl.alarmOn!==false;
+        return '<div class="arow">'
+          +'<div><div class="aday">'+sl.day+(sl.day===today?' · Today':'')+'</div>'
+          +'<div class="acode" style="color:'+(c?c.color:'#aaa')+'">'+(c?c.code:sl.courseId)+'</div>'
+          +'<div class="atime">🕐 '+fmt12(sl.time)+' · fires '+fireTime(sl.time)+'</div></div>'
+          +'<span class="badge '+(on?'on':'off')+'" onclick="toggleAlarm('+idx+')">'+(on?'ON':'OFF')+'</span>'
+          +'</div>';
+      }).join('');
+
+  var todaySlots = state.slots.filter(function(s){return s.day===today;}).sort(function(a,b){return a.time.localeCompare(b.time);});
+  var todayHtml = todaySlots.length===0
+    ? '<div style="font-size:13px;color:#555;font-style:italic">No classes today.</div>'
+    : todaySlots.map(function(sl){
+        var c=COURSES.find(function(x){return x.id===sl.courseId;});
+        return '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">'
+          +'<div style="width:3px;height:36px;border-radius:2px;background:'+(c?c.color:'#aaa')+';flex-shrink:0"></div>'
+          +'<div><div style="font-size:12px;font-weight:700;font-family:Syne,sans-serif;color:'+(c?c.color:'#aaa')+'">'+(c?c.code:'?')+' · '+fmt12(sl.time)+'</div>'
+          +'<div style="font-size:11px;color:#aaa">'+(c?c.title:'')+'</div></div></div>';
+      }).join('');
+
+  var sumRows = COURSES.map(function(c){
+    var p=getP(c.id), pct=Math.round(p.done/p.total*100);
+    return '<div class="srow"><span class="scode" style="color:'+c.color+'">'+c.code+'</span>'
+      +'<div class="sbg"><div class="sfill" style="width:'+pct+'%;background:'+c.color+'"></div></div>'
+      +'<span class="spct">'+pct+'%</span></div>';
+  }).join('');
+
+  el.innerHTML =
+    '<div style="font-family:Syne,sans-serif;font-size:19px;font-weight:800;margin-bottom:4px">Alarms</div>'
+    +'<div style="font-size:12px;color:#6b7280;margin-bottom:14px">Notifications fire 15 min before each class.</div>'
+    +'<div class="acard"><div class="atitle">🔔 Notification Status</div>'
+    +(notifOk
+      ?'<div style="font-size:13px;color:#4CAF82;font-weight:600">✅ Notifications enabled</div>'
+      :'<button class="notif-btn" onclick="reqNotif()">Enable Notifications</button>')
+    +'<div id="nst" style="font-size:12px;color:#888;margin-top:6px;text-align:center"></div></div>'
+    +'<div class="acard"><div class="atitle">📅 Today ('+today+')</div>'+todayHtml+'</div>'
+    +'<div class="acard"><div class="atitle">⏰ All Class Alarms</div>'+alarmRows+'</div>'
+    +'<div class="acard"><div class="atitle">📊 Topic Progress</div>'+sumRows+'</div>';
+}
+
+async function reqNotif() {
+  if(!('Notification' in window)){document.getElementById('nst').textContent='❌ Not supported here.';return;}
+  var p = await Notification.requestPermission();
+  if(p==='granted'){scheduleAlarms();setTimeout(function(){renderAlarms();},500);}
+  else document.getElementById('nst').textContent='❌ Blocked. Allow in browser settings.';
+}
+
+// ── SCHEDULE ALARMS ──
+function scheduleAlarms() {
+  alarmTimers.forEach(function(t){clearTimeout(t);});
+  alarmTimers=[];
+  if(!('Notification' in window)||Notification.permission!=='granted') return;
+  var now = new Date();
+  state.slots.forEach(function(sl) {
+    if(sl.alarmOn===false) return;
+    var course = COURSES.find(function(c){return c.id===sl.courseId;});
+    var dayIdx = DAYS.indexOf(sl.day);
+    var slotDow = (dayIdx+1)%7;
+    var parts = sl.time.split(':'), h=parseInt(parts[0]), m=parseInt(parts[1]);
+    var todayDow = now.getDay();
+    var diff = (slotDow-todayDow+7)%7;
+    var target = new Date(now);
+    target.setDate(now.getDate()+diff);
+    target.setHours(h, m-ALARM_MIN, 0, 0);
+    if(target<=now) target.setDate(target.getDate()+7);
+    var delay = target-now;
+    var tid = setTimeout(function(){
+      new Notification('🔔 Class in 15 min', {body:(course?course.code:sl.courseId)+' · '+sl.day+' '+fmt12(sl.time)+(sl.note?'\n'+sl.note:'')});
+      scheduleAlarms();
+    }, delay);
+    alarmTimers.push(tid);
+  });
+}
+
+init();
+
+// Force cache bust on load
+if(window.location.search.indexOf('v=')===-1){
+  window.location.replace(window.location.href.split('?')[0]+'?v=6');
+}
 </script>
 </body>
 </html>
