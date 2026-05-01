@@ -1,0 +1,13 @@
+<svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="26" cy="26" r="26" fill="#1d2236" stroke="#4f8ef7" stroke-width="2"/>
+  
+  <!-- Head -->
+  <circle cx="26" cy="16" r="7" fill="#4f8ef7"/>
+  
+  <!-- Body -->
+  <path d="M20 24C20 24 20 28 26 28C32 28 32 24 32 24L32 36C32 36 29 39 26 39C23 39 20 36 20 36L20 24Z" fill="#4f8ef7" opacity="0.8"/>
+  
+  <!-- Accent -->
+  <circle cx="38" cy="10" r="4" fill="#FFD700"/>
+</svg>
